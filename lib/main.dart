@@ -93,7 +93,7 @@ class _KalcyState extends State<Kalcy> {
 
   int changeSign() {
     clearBeChutiye();
-    
+
     if (checkExpression(_displayText).isExpression){
       return -1;
     }
@@ -210,120 +210,109 @@ class _KalcyState extends State<Kalcy> {
   //TODO: make percentange calculation better and calculate 121 + 10%. Expected: 133.1 , Current 131. --done by using num insted of int and
   // updating regex to take decimal values.
 
+
+    final colors = {
+      "dark": const Color.fromRGBO(54, 59, 81, 1.0),
+      "light": const Color.fromRGBO(255, 255, 255, 1.0),
+      "operatorsColor": const Color.fromARGB(255, 175, 1, 1),
+    };
+    Container buttonBody ({
+      required String sign,
+      required String type,
+      required bool isDark,
+      String? borderSide,
+    }){
+      return Container(
+        decoration: BoxDecoration(
+          // border:  
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Text(sign, style: TextStyle(
+            color: type == "operator"? colors["operatorsColor"]: isDark ? colors["light"]: colors["dark"],
+            fontSize: 40
+          ),),
+        ),
+      );
+    }
+
   @override
   Widget build(BuildContext context) {
+    final brightness = MediaQuery.of(context).platformBrightness;
+    final isDark = brightness == Brightness.dark;
+
+    final buttons = [
+      //row 1
+      TextButton(onPressed: (){removeAllChar();}, child: buttonBody(sign: "C", type: "operator", isDark: isDark)),
+      TextButton(onPressed: (){changeSign();}, child: buttonBody(sign: "+/-", type: "operator", isDark: isDark)),
+      TextButton(onPressed: (){calPercentage(_displayText);}, child: buttonBody(sign: "%", type: "operator", isDark: isDark)),
+      TextButton(onPressed: (){addOperator("\u00F7");}, child: buttonBody(sign: "\u00F7", type: "operator", isDark: isDark)),
+
+      //row 2
+      TextButton(onPressed: (){addChar("7");}, child: buttonBody(sign: "7", type: "number", isDark: isDark)),
+      TextButton(onPressed: (){addChar("8");}, child: buttonBody(sign: "8", type: "number", isDark: isDark)),
+      TextButton(onPressed: (){addChar("9");}, child: buttonBody(sign: "9", type: "number", isDark: isDark)),
+      TextButton(onPressed: (){addOperator("x");}, child: buttonBody(sign: "x", type: "operator", isDark: isDark)),
+
+      //row 3
+      TextButton(onPressed: (){addChar("4");}, child: buttonBody(sign: "4", type: "number", isDark: isDark)),
+      TextButton(onPressed: (){addChar("5");}, child: buttonBody(sign: "5", type: "number", isDark: isDark)),
+      TextButton(onPressed: (){addChar("6");}, child: buttonBody(sign: "6", type: "number", isDark: isDark)),
+      TextButton(onPressed: (){addOperator("-");}, child: buttonBody(sign: "-", type: "operator", isDark: isDark)),
+
+      //row 4
+      TextButton(onPressed: (){addChar("1");}, child: buttonBody(sign: "1", type: "number", isDark: isDark)),
+      TextButton(onPressed: (){addChar("2");}, child: buttonBody(sign: "2", type: "number", isDark: isDark)),
+      TextButton(onPressed: (){addChar("3");}, child: buttonBody(sign: "3", type: "number", isDark: isDark)),
+      TextButton(onPressed: (){addOperator("+");}, child: buttonBody(sign: "+", type: "operator", isDark: isDark)),
+
+      //row 5
+      TextButton(onPressed: (){addChar("0");}, child: buttonBody(sign: "0", type: "number", isDark: isDark)),
+      TextButton(onPressed: (){addDecimal(_displayText);}, child: buttonBody(sign: ".", type: "number", isDark: isDark)),
+      SizedBox(width: 50,),
+      TextButton(onPressed: (){calValue(_displayText);}, child: Container(
+        // width: 500,
+        decoration: BoxDecoration(
+          // color: Colors.green,
+        ),
+        child: Text("=", style: TextStyle(
+          color: colors["operatorsColor"],
+          fontSize: 40
+          ),
+        ),
+      ),
+      )
+    ];
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: 50,
-                width: 250,
-                alignment: Alignment.bottomRight,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.red, width: 2),
+        backgroundColor: isDark? colors["dark"]: colors["light"],
+        body: Column(
+          children: [
+            Expanded(
+              flex: 3,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Align(
+                  alignment: AlignmentGeometry.bottomRight,
+                  child: Text(_displayText, style: TextStyle(
+                    fontSize: 62,
+                    fontWeight: FontWeight(600),
+                    color: isDark? colors["light"]: colors["dark"],
+                  ),),
                 ),
-                child: SingleChildScrollView(
-                  reverse: false,
-                  child: Text(_displayText, style: TextStyle(fontSize: 20)),
-                ),
-              ),
-
-              Column(
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      addDecimal(_displayText);
-                    },
-                    child: Text(".", style: TextStyle(fontSize: 24)),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      addChar("0");
-                    },
-                    child: Text("0", style: TextStyle(fontSize: 24)),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      addChar("1");
-                    },
-                    child: Text("1", style: TextStyle(fontSize: 24)),
-                  ),
-
-                  TextButton(
-                    onPressed: () {
-                      addChar("2");
-                    },
-                    child: Text("2", style: TextStyle(fontSize: 24)),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      addOperator("+");
-                    },
-                    child: Text("+", style: TextStyle(fontSize: 24)),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      addOperator("-");
-                    },
-                    child: Text("-", style: TextStyle(fontSize: 24)),
-                  ),
-
-                  TextButton(
-                    onPressed: () {
-                      addOperator("x");
-                    },
-                    child: Text("X", style: TextStyle(fontSize: 24)),
-                  ),
-
-                  TextButton(
-                    onPressed: () {
-                      addOperator("\u00F7");
-                    },
-                    child: Text("\u00F7", style: TextStyle(fontSize: 24)),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      calPercentage(_displayText);
-                    },
-                    child: Text("%", style: TextStyle(fontSize: 24)),
-                  ),
-
-                  TextButton(
-                    onPressed: () {
-                      print(checkExpression(_displayText));
-                      calValue(_displayText);
-                    },
-                    child: Text("=", style: TextStyle(fontSize: 24)),
-                  ),
-
-                  TextButton(
-                    onPressed: () {
-                      removeChar();
-                    },
-                    child: Text("C", style: TextStyle(fontSize: 24)),
-                  ),
-
-                  TextButton(
-                    onPressed: () {
-                      removeAllChar();
-                    },
-                    child: Text("CE", style: TextStyle(fontSize: 24)),
-                  ),
-
-                  TextButton(
-                    onPressed: () {
-                      changeSign();
-                    },
-                    child: Text("+/-", style: TextStyle(fontSize: 24)),
-                  ),
-                ],
-              ),
-            ],
-          ),
+              )),
+            Expanded(
+              flex: 7,
+              child:GridView.builder(
+                itemCount: buttons.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+                itemBuilder: (context, index) {
+                  return buttons[index];
+                },
+                ))
+          ],
         ),
       ),
     );
