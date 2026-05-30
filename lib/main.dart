@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(Kalcy());
@@ -278,16 +279,29 @@ class _KalcyState extends State<Kalcy> {
         TextButton(onPressed: (){addChar("0");}, child: buttonBody(sign: "0", type: "number", isDark: isDark)),
         TextButton(onPressed: (){addDecimal(_displayText);}, child: buttonBody(sign: ".", type: "number", isDark: isDark)),
         TextButton(onPressed: (){calValue(_displayText);}, child: Container(
-        child: Text("=", style: TextStyle(
-          color: colors["operatorsColor"],
-          fontSize: 40
+          width: double.infinity,
+          height: 70,
+          decoration: BoxDecoration(
+          color:Color.fromARGB(52, 76, 175, 79),
+          border: Border.all(color: Colors.green, width: 2),
+          borderRadius: BorderRadius.circular(20)
+          ),
+        child: Center(
+          child: Text("=", style: TextStyle(
+            color: colors["operatorsColor"],
+            fontSize: 40
+            ),
           ),
         ),
-      ),
+              ),
       )]
     ];
 
     return MaterialApp(
+      theme: ThemeData(
+        textTheme: GoogleFonts.outfitTextTheme(),
+        fontFamily: GoogleFonts.outfit().fontFamily,
+      ),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: isDark? colors["dark"]: colors["light"],
@@ -300,7 +314,7 @@ class _KalcyState extends State<Kalcy> {
                 child: Align(
                   alignment: AlignmentGeometry.bottomRight,
                   child: Text(_displayText, style: TextStyle(
-                    fontSize: 62,
+                    fontSize: 72,
                     fontWeight: FontWeight(600),
                     color: isDark? colors["light"]: colors["dark"],
                   ),),
@@ -308,16 +322,66 @@ class _KalcyState extends State<Kalcy> {
               )),
             Expanded(
               flex: 7,
-              child:Column(
-                children: buttonsRows.map((row){
-                  return Expanded(child: Row(
-                    children: row.map((button){
-                      return  
-                       Expanded(child: button);
-                    }).toList(),
-                  ));
-                }).toList(),
-              ))
+              child:Stack(
+                children: [ Column(
+                  children: [...buttonsRows.take(4).map((row){
+                    return Expanded(child: Row(
+                      children: row.map((button){
+                        return  
+                         Expanded(child: button);
+                      }).toList(),
+                    ),
+                    );
+                  }),
+                
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Expanded(child: buttonsRows[4][0]),
+                        Expanded(child: buttonsRows[4][1]),
+                
+                        Expanded(
+                          flex: 2,
+                          child: buttonsRows[4][2])
+                      ],
+                    ),
+                  )]
+                ),
+                Positioned(
+                  top: 120,
+                  left: 20,
+                  child: Container(
+                    height: 2,
+                    width: 270,
+                    color: colors["operatorsColor"],
+                  )),
+                  Positioned(
+                    top: 120,
+                    right: 20,
+                    child: Container(
+                    height: 2,
+                    width: 60,
+                    color: colors["operatorsColor"],
+                  )),
+                  Positioned(
+                    top: 40,
+                    right: 100,
+                    child: Container(
+                    height: 60,
+                    width: 2,
+                    color: colors["operatorsColor"],
+                  )),
+                  Positioned(
+                    top: 150,
+                    right: 100,
+                    child: Container(
+                    height: 360,
+                    width: 2,
+                    color: colors["operatorsColor"],
+                  ))
+                ]
+              ),
+              ),
           ],
         ),
       ),
