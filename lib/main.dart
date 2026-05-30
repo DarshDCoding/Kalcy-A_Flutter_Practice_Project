@@ -242,47 +242,49 @@ class _KalcyState extends State<Kalcy> {
     final brightness = MediaQuery.of(context).platformBrightness;
     final isDark = brightness == Brightness.dark;
 
-    final buttons = [
+    final buttonsRows = [
       //row 1
-      TextButton(onPressed: (){removeAllChar();}, child: buttonBody(sign: "C", type: "operator", isDark: isDark)),
-      TextButton(onPressed: (){changeSign();}, child: buttonBody(sign: "+/-", type: "operator", isDark: isDark)),
-      TextButton(onPressed: (){calPercentage(_displayText);}, child: buttonBody(sign: "%", type: "operator", isDark: isDark)),
-      TextButton(onPressed: (){addOperator("\u00F7");}, child: buttonBody(sign: "\u00F7", type: "operator", isDark: isDark)),
-
+      [
+        TextButton(onPressed: (){removeAllChar();}, child: buttonBody(sign: "C", type: "operator", isDark: isDark)),
+        TextButton(onPressed: (){changeSign();}, child: buttonBody(sign: "+/-", type: "operator", isDark: isDark)),
+        TextButton(onPressed: (){calPercentage(_displayText);}, child: buttonBody(sign: "%", type: "operator", isDark: isDark)),
+        TextButton(onPressed: (){addOperator("\u00F7");}, child: buttonBody(sign: "\u00F7", type: "operator", isDark: isDark)),
+      ],
       //row 2
-      TextButton(onPressed: (){addChar("7");}, child: buttonBody(sign: "7", type: "number", isDark: isDark)),
-      TextButton(onPressed: (){addChar("8");}, child: buttonBody(sign: "8", type: "number", isDark: isDark)),
-      TextButton(onPressed: (){addChar("9");}, child: buttonBody(sign: "9", type: "number", isDark: isDark)),
-      TextButton(onPressed: (){addOperator("x");}, child: buttonBody(sign: "x", type: "operator", isDark: isDark)),
+      [
+        TextButton(onPressed: (){addChar("7");}, child: buttonBody(sign: "7", type: "number", isDark: isDark)),
+        TextButton(onPressed: (){addChar("8");}, child: buttonBody(sign: "8", type: "number", isDark: isDark)),
+        TextButton(onPressed: (){addChar("9");}, child: buttonBody(sign: "9", type: "number", isDark: isDark)),
+        TextButton(onPressed: (){addOperator("x");}, child: buttonBody(sign: "x", type: "operator", isDark: isDark)),
+      ],
 
       //row 3
-      TextButton(onPressed: (){addChar("4");}, child: buttonBody(sign: "4", type: "number", isDark: isDark)),
-      TextButton(onPressed: (){addChar("5");}, child: buttonBody(sign: "5", type: "number", isDark: isDark)),
-      TextButton(onPressed: (){addChar("6");}, child: buttonBody(sign: "6", type: "number", isDark: isDark)),
-      TextButton(onPressed: (){addOperator("-");}, child: buttonBody(sign: "-", type: "operator", isDark: isDark)),
+      [
+        TextButton(onPressed: (){addChar("4");}, child: buttonBody(sign: "4", type: "number", isDark: isDark)),
+        TextButton(onPressed: (){addChar("5");}, child: buttonBody(sign: "5", type: "number", isDark: isDark)),
+        TextButton(onPressed: (){addChar("6");}, child: buttonBody(sign: "6", type: "number", isDark: isDark)),
+        TextButton(onPressed: (){addOperator("-");}, child: buttonBody(sign: "-", type: "operator", isDark: isDark)),
+      ],
 
       //row 4
-      TextButton(onPressed: (){addChar("1");}, child: buttonBody(sign: "1", type: "number", isDark: isDark)),
-      TextButton(onPressed: (){addChar("2");}, child: buttonBody(sign: "2", type: "number", isDark: isDark)),
-      TextButton(onPressed: (){addChar("3");}, child: buttonBody(sign: "3", type: "number", isDark: isDark)),
-      TextButton(onPressed: (){addOperator("+");}, child: buttonBody(sign: "+", type: "operator", isDark: isDark)),
-
+      [
+        TextButton(onPressed: (){addChar("1");}, child: buttonBody(sign: "1", type: "number", isDark: isDark)),
+        TextButton(onPressed: (){addChar("2");}, child: buttonBody(sign: "2", type: "number", isDark: isDark)),
+        TextButton(onPressed: (){addChar("3");}, child: buttonBody(sign: "3", type: "number", isDark: isDark)),
+        TextButton(onPressed: (){addOperator("+");}, child: buttonBody(sign: "+", type: "operator", isDark: isDark)),
+      ],
       //row 5
-      TextButton(onPressed: (){addChar("0");}, child: buttonBody(sign: "0", type: "number", isDark: isDark)),
-      TextButton(onPressed: (){addDecimal(_displayText);}, child: buttonBody(sign: ".", type: "number", isDark: isDark)),
-      SizedBox(width: 50,),
-      TextButton(onPressed: (){calValue(_displayText);}, child: Container(
-        // width: 500,
-        decoration: BoxDecoration(
-          // color: Colors.green,
-        ),
+      [
+        TextButton(onPressed: (){addChar("0");}, child: buttonBody(sign: "0", type: "number", isDark: isDark)),
+        TextButton(onPressed: (){addDecimal(_displayText);}, child: buttonBody(sign: ".", type: "number", isDark: isDark)),
+        TextButton(onPressed: (){calValue(_displayText);}, child: Container(
         child: Text("=", style: TextStyle(
           color: colors["operatorsColor"],
           fontSize: 40
           ),
         ),
       ),
-      )
+      )]
     ];
 
     return MaterialApp(
@@ -306,13 +308,16 @@ class _KalcyState extends State<Kalcy> {
               )),
             Expanded(
               flex: 7,
-              child:GridView.builder(
-                itemCount: buttons.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
-                itemBuilder: (context, index) {
-                  return buttons[index];
-                },
-                ))
+              child:Column(
+                children: buttonsRows.map((row){
+                  return Expanded(child: Row(
+                    children: row.map((button){
+                      return  
+                       Expanded(child: button);
+                    }).toList(),
+                  ));
+                }).toList(),
+              ))
           ],
         ),
       ),
