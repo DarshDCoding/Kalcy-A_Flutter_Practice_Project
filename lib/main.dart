@@ -216,6 +216,7 @@ class _KalcyState extends State<Kalcy> {
       "light": const Color.fromRGBO(255, 255, 255, 1.0),
       "operatorsColor": const Color.fromARGB(255, 175, 1, 1),
     };
+
     Container buttonBody ({
       required String sign,
       required String type,
