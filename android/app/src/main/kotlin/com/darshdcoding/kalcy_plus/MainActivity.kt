@@ -1,4 +1,4 @@
-package com.example.kelcy
+package com.darshdcoding.kalcy_plus
 
 import io.flutter.embedding.android.FlutterActivity
 
