@@ -1,0 +1,4 @@
+UI Technical Debt:
+- Divider lines use hardcoded Positioned values.
+- Layout not tested against large font sizes.
+- Layout not tested on tablets.
